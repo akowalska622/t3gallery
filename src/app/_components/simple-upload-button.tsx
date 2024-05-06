@@ -71,15 +71,38 @@ function LoadingSpinnerSVG() {
   );
 }
 
+// DEBUGGING AND STYLING TOASTS
+
+// function debugUploadToast() {
+//   return toast(
+//     <div className=" flex items-center gap-2 text-white">
+//       <LoadingSpinnerSVG />
+//       <span className="text-lg">Uploading...</span>
+//     </div>,
+//     {
+//       duration: 100000,
+//       id: "upload-begin",
+//     },
+//   );
+// }
+
+// window.makeToast = debugUploadToast;
+
 export function SimpleUploadButton() {
   const router = useRouter();
 
   const { inputProps } = useUploadThingInputProps("imageUploader", {
     onUploadBegin() {
-      toast("Uploading...", {
-        duration: 100000,
-        id: "upload-begin",
-      });
+      toast(
+        <div className=" flex items-center gap-2 text-white">
+          <LoadingSpinnerSVG />
+          <span className="text-lg">Uploading...</span>
+        </div>,
+        {
+          duration: 100000,
+          id: "upload-begin",
+        },
+      );
     },
     onClientUploadComplete() {
       toast.dismiss("upload-begin");

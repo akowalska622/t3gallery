@@ -14,7 +14,7 @@
 - [x] Error management (w/ Sentry)
 - [x] Routing/image page (parallel route)
 - [x] Update upload button
-- [ ] ShadUItify
+- [x] ShadUItify
 - [ ] Delete button (w/ Server Actions)
 - [ ] Analytics (posthog)
 - [ ] Ratelimiting (upstash)
