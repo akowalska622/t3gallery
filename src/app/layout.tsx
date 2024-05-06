@@ -2,13 +2,14 @@ import { Inter } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import { extractRouterConfig } from "uploadthing/server";
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
-import { Toaster } from "~/components/ui/sonner";
+import { CSPostHogProvider } from "./_analytics/provider";
 
+import { Toaster } from "~/components/ui/sonner";
 import TopNav from "~/app/_components/topnav";
+import { ourFileRouter } from "~/app/api/uploadthing/core";
 
 import "@uploadthing/react/styles.css";
 import "~/styles/globals.css";
-import { ourFileRouter } from "~/app/api/uploadthing/core";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -30,18 +31,20 @@ export default function RootLayout({
 }) {
   return (
     <ClerkProvider>
-      <html lang="en">
-        <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
-        <body className={`font-sans ${inter.variable} dark`}>
-          <div className="grid h-screen grid-rows-[auto,1fr] overflow-hidden">
-            <TopNav />
-            <main className="overflow-y-scroll">{children}</main>
-          </div>
-          {modal}
-          <div id="modal-root"></div>
-          <Toaster />
-        </body>
-      </html>
+      <CSPostHogProvider>
+        <html lang="en">
+          <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
+          <body className={`font-sans ${inter.variable} dark`}>
+            <div className="grid h-screen grid-rows-[auto,1fr] overflow-hidden">
+              <TopNav />
+              <main className="overflow-y-scroll">{children}</main>
+            </div>
+            {modal}
+            <div id="modal-root"></div>
+            <Toaster />
+          </body>
+        </html>
+      </CSPostHogProvider>
     </ClerkProvider>
   );
 }
