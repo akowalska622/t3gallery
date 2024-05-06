@@ -1,7 +1,11 @@
 import "server-only";
 
 import { auth } from "@clerk/nextjs/server";
+import { and, eq } from "drizzle-orm";
+import { redirect } from "next/navigation";
+
 import { db } from "~/server/db";
+import { images } from "~/server/db/schema";
 
 export const getMyImages = async () => {
   const user = auth();
@@ -27,3 +31,22 @@ export const getImage = async (id: number) => {
 
   return image;
 };
+
+export async function deleteImage(id: number) {
+  const user = auth();
+  if (!user.userId) throw new Error("Unauthorized");
+
+  await db
+    .delete(images)
+    .where(and(eq(images.id, id), eq(images.userId, user.userId)));
+
+  // analyticsServerClient.capture({
+  //   distinctId: user.userId,
+  //   event: "delete image",
+  //   properties: {
+  //     imageId: id,
+  //   },
+  // });
+
+  redirect("/");
+}
