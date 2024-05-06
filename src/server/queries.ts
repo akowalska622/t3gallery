@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 
 import { db } from "~/server/db";
 import { images } from "~/server/db/schema";
+import analyticsServerClient from "~/server/analytics";
 
 export const getMyImages = async () => {
   const user = auth();
@@ -40,13 +41,13 @@ export async function deleteImage(id: number) {
     .delete(images)
     .where(and(eq(images.id, id), eq(images.userId, user.userId)));
 
-  // analyticsServerClient.capture({
-  //   distinctId: user.userId,
-  //   event: "delete image",
-  //   properties: {
-  //     imageId: id,
-  //   },
-  // });
+  analyticsServerClient.capture({
+    distinctId: user.userId,
+    event: "delete image",
+    properties: {
+      imageId: id,
+    },
+  });
 
   redirect("/");
 }
